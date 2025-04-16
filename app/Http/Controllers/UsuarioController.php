@@ -20,7 +20,7 @@ class UsuarioController extends Controller
             'name'     => 'required|string',
             'email'    => 'required|email|unique:users',
             'password' => 'required|min:6',
-            'id_rol'   => 'required|integer',
+            'rol_id'   => 'required|integer',
             'estado'   => 'required|string',
         ]);
 
@@ -43,7 +43,7 @@ class UsuarioController extends Controller
     $validated = $request->validate([
         'name' => 'sometimes|string|max:255',
         'email' => 'sometimes|email|unique:users,email,' . $id,
-        'id_rol' => 'sometimes|integer',
+        'rol_id' => 'sometimes|integer',
         'estado' => 'sometimes|string',
     ]);
 

@@ -52,7 +52,7 @@ class User extends Authenticatable
     }
 
     public function rol(){
-        return $this->belongsTo(Rol::class, 'id_rol');
+        return $this->belongsTo(Rol::class, 'rol_id');
     }
 
     public function cliente(): HasOne {

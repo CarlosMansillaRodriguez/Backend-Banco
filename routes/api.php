@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\CuentaController;
+
 
 
 
@@ -38,5 +40,12 @@ Route::middleware('apiauth')->group(function () {
     Route::get('/clientes/{id}', [ClienteController::class, 'show']);
     Route::put('/clientes/{id}', [ClienteController::class, 'update']);
     Route::delete('/clientes/{id}', [ClienteController::class, 'destroy']);
+
+    // Rutas para cuentas
+    Route::get('/cuentas', [CuentaController::class, 'index']);
+    Route::post('/cuentas', [CuentaController::class, 'store']);
+    Route::get('/cuentas/{id}', [CuentaController::class, 'show']);
+    Route::put('/cuentas/{id}', [CuentaController::class, 'update']);
+    Route::delete('/cuents/{id}', [CuentaController::class, 'destroy']);
 
 });

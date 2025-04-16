@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Cliente;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Rol;
+use App\Models\Cliente;
+
 
 class ClienteController extends Controller
 {
@@ -23,7 +24,6 @@ class ClienteController extends Controller
 
     public function store(Request $request)
     {
-
         // Validación de datos
         $request->validate([
             'ci' => 'required|unique:clientes',
