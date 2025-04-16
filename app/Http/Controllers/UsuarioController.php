@@ -29,6 +29,7 @@ class UsuarioController extends Controller
         $user = User::create($validated);
 
         return response()->json([
+            'status' => true,
             'message' => 'Usuario creado correctamente',
             'user' => $user
         ], 201);
@@ -51,7 +52,7 @@ class UsuarioController extends Controller
     return response()->json([
         'message' => 'Usuario actualizado correctamente',
         'user' => $user
-    ]);
+    ], 200);
     }
 
 
