@@ -23,6 +23,12 @@ class UsuarioController extends Controller
             'nombre_user' => 'required|string|max:100',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:6',
+            'nombre' => 'required|string|max:100',
+            'apellido' => 'required|string|max:100',
+            'genero' => 'required|string|max:1',
+            'estado' => 'required|string|max:1',
+            'fecha_nacimiento' => 'required|date',
+            // Validación para los roles
             'roles' => 'required|array|min:1',
             'roles.*' => 'exists:rols,id'
         ]);
@@ -31,6 +37,11 @@ class UsuarioController extends Controller
             'nombre_user' => $request->nombre_user,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'nombre' => $request->nombre,
+            'apellido' => $request->apellido,
+            'genero' => $request->genero,
+            'estado' => $request->estado,
+            'fecha_nacimiento' => $request->fecha_nacimiento,
         ]);
 
         // Asignar roles al usuario
@@ -75,6 +86,11 @@ class UsuarioController extends Controller
         if ($request->has('nombre_user')) $usuario->nombre_user = $request->nombre_user;
         if ($request->has('email')) $usuario->email = $request->email;
         if ($request->filled('password')) $usuario->password = Hash::make($request->password);
+        if ($request->has('nombre')) $usuario->nombre = $request->nombre;
+        if ($request->has('apellido')) $usuario->apellido = $request->apellido;
+        if ($request->has('genero')) $usuario->genero = $request->genero;
+        if ($request->has('estado')) $usuario->estado = $request->estado;
+        if ($request->has('fecha_nacimiento')) $usuario->fecha_nacimiento = $request->fecha_nacimiento;
         $usuario->save();
 
         // Si se enviaron nuevos roles, sincronizarlos
@@ -120,7 +136,7 @@ class UsuarioController extends Controller
 
     $request->validate([
         'roles' => 'required|array',
-        'roles.*' => 'exists:roles,id' 
+        'roles.*' => 'exists:roles,id'
     ]);
 
     $usuario->roles()->syncWithoutDetaching($request->roles);

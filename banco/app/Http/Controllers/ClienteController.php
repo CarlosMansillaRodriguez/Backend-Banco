@@ -20,18 +20,20 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         // Solo administradores pueden registrar clientes
-        if (!$request->user()->hasRol('Administrador')) {
-            return response()->json(['error' => 'Acceso denegado'], 403);
-        }
+        // if (!$request->user()->hasRol('Administrador')) {
+        //     return response()->json(['error' => 'Acceso denegado'], 403);
+        // }
 
         // Validación
         $request->validate([
             'ci' => 'required|unique:clientes',
             'nombre' => 'required|string|min:2|max:100',
             'apellido' => 'required|string|min:2|max:100',
-            'telefono' => 'required|string',
+            'telefono' => 'required|integer',
             'direccion' => 'required|string',
             'genero' => 'required|max:10',
+            'estado' => 'required|boolean',
+            'fecha_nacimiento' => 'required|date',
             'email' => 'required|email|unique:usuarios,email',
             'nombre_user' => 'required|string|min:2|max:100',
             'password' => 'nullable|string|min:6',
@@ -53,6 +55,11 @@ class ClienteController extends Controller
             'email' => $request->email,
             'password' => $password,
             'nombre_user' => $request->nombre_user,
+            'nombre' => $request->nombre,
+            'apellido' => $request->apellido,
+            'genero' => $request->genero,
+            'estado' => $request->estado,
+            'fecha_nacimiento' => $request->fecha_nacimiento,
         ]);
 
         // Asignar rol
@@ -61,11 +68,8 @@ class ClienteController extends Controller
         // Crear cliente vinculado al usuario
         $cliente = Cliente::create([
             'ci' => $request->ci,
-            'nombre' => $request->nombre,
-            'apellido' => $request->apellido,
-            'telefono' => $request->telefono,
             'direccion' => $request->direccion,
-            'genero' => $request->genero,
+            'telefono' => $request->genero,
             'usuario_id' => $usuario->id,
         ]);
 
@@ -96,27 +100,61 @@ class ClienteController extends Controller
         }
 
         $request->validate([
-            'nombre' => 'string|min:2|max:100',
-            'apellido' => 'string|min:2|max:100',
-            'telefono' => 'string',
-            'direccion' => 'string',
-            'genero' => 'string|max:10',
-            'email' => 'nullable|email|unique:usuarios,email,' . $cliente->usuario_id,
-            'nombre_user' => 'nullable|string|min:2|max:100',
+            'ci' => 'required|unique:clientes',
+            'nombre' => 'required|string|min:2|max:100',
+            'apellido' => 'required|string|min:2|max:100',
+            'telefono' => 'required|integer',
+            'direccion' => 'required|string',
+            'genero' => 'required|max:10',
+            'estado' => 'required|boolean',
+            'fecha_nacimiento' => 'required|date',
+            'email' => 'required|email|unique:usuarios,email',
+            'nombre_user' => 'required|string|min:2|max:100',
+            'password' => 'nullable|string|min:6',
         ]);
 
-        $cliente->update($request->only(['nombre', 'apellido', 'telefono', 'direccion', 'genero']));
+        $cliente->update($request->only(['ci', 'telefono', 'direccion']));
 
         // Actualizar usuario relacionado
         if ($cliente->usuario) {
-            if ($request->filled('email')) {
-                $cliente->usuario->email = $request->email;
-            }
-            if ($request->filled('nombre_user')) {
-                $cliente->usuario->nombre_user = $request->nombre_user;
-            }
-            $cliente->usuario->save();
+            $cliente->usuario->update($request->only([
+                'email',
+                'nombre_user',
+                'password',
+                'nombre',
+                'apellido',
+                'genero',
+                'estado',
+                'fecha_nacimiento'
+            ]));
         }
+        // if ($cliente->usuario) {
+        //     if ($request->filled('email')) {
+        //         $cliente->usuario->email = $request->email;
+        //     }
+        //     if ($request->filled('nombre_user')) {
+        //         $cliente->usuario->nombre_user = $request->nombre_user;
+        //     }
+        //     if ($request->filled('password')) {
+        //         $cliente->usuario->password = Hash::make($request->password);
+        //     }
+        //     if ($request->filled('nombre')) {
+        //         $cliente->usuario->nombre = $request->nombre;
+        //     }
+        //     if ($request->filled('apellido')) {
+        //         $cliente->usuario->apellido = $request->apellido;
+        //     }
+        //     if ($request->filled('genero')) {
+        //         $cliente->usuario->genero = $request->genero;
+        //     }
+        //     if ($request->filled('estado')) {
+        //         $cliente->usuario->estado = $request->estado;
+        //     }
+        //     if ($request->filled('fecha_nacimiento')) {
+        //         $cliente->usuario->fecha_nacimiento = $request->fecha_nacimiento;
+        //     }
+        //     $cliente->usuario->save();
+        // }
 
         return response()->json([
             'status' => true,

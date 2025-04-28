@@ -10,21 +10,15 @@ class UsuarioSeeder extends Seeder
 {
     public function run()
     {
-        Usuario::firstOrCreate(
-            ['email' => 'admin@banco.com'],
-            [
-                'nombre_user' => 'admin',
-                'password' => Hash::make('12345678'),
-            ]
-        );
-
-        Usuario::firstOrCreate(
-            ['email' => 'cliente@banco.com'],
-            [
-                'nombre_user' => 'cliente',
-                'password' => Hash::make('12345678'),
-                
-            ]
-        );
+        Usuario::firstOrCreate([   
+            'email' => 'admin@banco.com' ,        
+            'nombre_user' => 'admin',
+            'password' => Hash::make('12345678'),
+            'nombre' => 'Admin',
+            'apellido' => 'Banco',
+            'genero' => 'M',
+            'estado' => true,
+            'fecha_nacimiento' => '1990-01-01',
+        ]);
     }
 }

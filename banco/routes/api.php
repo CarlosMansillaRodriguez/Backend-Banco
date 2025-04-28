@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BitacoraController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\CuentaController;
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\RolController;
@@ -32,6 +33,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/usuarios/{id}/roles', [UsuarioController::class, 'asignarRoles']);
     Route::post('/usuarios/{id}/roles/revocar', [UsuarioController::class, 'revocarRoles']);
 
+    // CRUD de Empleados
+    Route::apiResource('empleados', EmpleadoController::class);
 
     // CRUD de Clientes
     Route::apiResource('clientes', ClienteController::class);

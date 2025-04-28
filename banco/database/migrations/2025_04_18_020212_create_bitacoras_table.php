@@ -16,7 +16,7 @@ return new class extends Migration
             $table->dateTime('fecha');
             $table->string('ip_usuario');
             $table->string('descripcion');
-            $table->unsignedBigInteger('usuario_id');
+            $table->unsignedBigInteger('usuario_id')->nullable();
             $table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
