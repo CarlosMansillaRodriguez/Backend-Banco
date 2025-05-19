@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bitacoras', function (Blueprint $table) {
+        Schema::create('tecno_atms', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('fecha');
-            $table->string('ip_usuario');
-            $table->string('descripcion');
-            $table->unsignedBigInteger('usuario_id')->nullable();
-            $table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('atm_id')->constrained('atms')->onDelete('cascade');
+            $table->foreignId('tecnico_id')->constrained('tecnicos')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bitacoras');
+        Schema::dropIfExists('tecno_atms');
     }
 };

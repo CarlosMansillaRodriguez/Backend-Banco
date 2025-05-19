@@ -5,11 +5,17 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BitacoraController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\CuentaController;
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\AtmController;
+use App\Http\Controllers\TecnicoController;
+use App\Http\Controllers\TarjetaController;
+use App\Http\Controllers\CelularController;
+use App\Http\Controllers\ReporteController;
 
 
 // Rutas públicas
@@ -27,23 +33,25 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
-    // CRUD de Usuarios
+    // CRUD de USUARIOS
     Route::apiResource('usuarios', UsuarioController::class);
     Route::post('/usuarios/{id}/roles', [UsuarioController::class, 'asignarRoles']);
     Route::post('/usuarios/{id}/roles/revocar', [UsuarioController::class, 'revocarRoles']);
 
+    // CRUD de EMPLEADOS
+    Route::apiResource('empleados', EmpleadoController::class);
 
-    // CRUD de Clientes
+    // CRUD de CLIENTES
     Route::apiResource('clientes', ClienteController::class);
 
-    // CRUD de Cuentas
+    // CRUD de CUENTAS
     Route::apiResource('cuentas', CuentaController::class);
 
-    // CRUD de Roles
+    // CRUD de ROLES
     Route::apiResource('roles', RolController::class);
-    
+    Route::get('/roles/{id}/permisos', [RolController::class, 'permisos']);
 
-    // CRUD de Permisos
+    // CRUD de PERMISOS
     Route::apiResource('permisos', PermisoController::class);
     Route::post('/permisos/asignar', [PermisoController::class, 'asignarPermiso']);
     Route::post('/permisos/desasignar', [PermisoController::class, 'desasignarPermiso']);
@@ -51,8 +59,18 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // CRUD de Bitácora (sólo admin quizás)
     Route::apiResource('bitacoras', BitacoraController::class);
+    // CRUD de ATM'S
+    Route::apiResource('atms', AtmController::class);
+    //CRUD de TECNICO
+    Route::apiResource('tecnicos', TecnicoController::class);   
 
-    
+    // CRUD de REPORTE
+    Route::apiResource('reportes', ReporteController::class);
+
+    // REGISTRO POR CELULAR sin token
+
+    Route::post('/celular/registrar-sin-token', [CelularController::class, 'registrarConCredenciales']);
+
 });
 Route::get('/db-check', function () {
     return response()->json([
@@ -61,4 +79,12 @@ Route::get('/db-check', function () {
 });
 Route::get('/verificar', function () {
     return response()->json(['mensaje' => 'Ruta funcionando correctamente']);
+});
+//Modificado por Carlos
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/tarjetas', [TarjetaController::class, 'index']);
+    Route::post('/tarjetas', [TarjetaController::class, 'store']);
+    Route::get('/tarjetas/{id}', [TarjetaController::class, 'show']);
+    Route::put('/tarjetas/{id}', [TarjetaController::class, 'update']);
+    Route::delete('/tarjetas/{id}', [TarjetaController::class, 'destroy']);
 });

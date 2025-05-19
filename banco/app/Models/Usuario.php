@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Cliente;
 
 class Usuario extends Authenticatable
 {
@@ -17,6 +18,11 @@ class Usuario extends Authenticatable
         'nombre_user',
         'email',
         'password',
+        'nombre',
+        'apellido',
+        'fecha_nacimiento',
+        'genero',
+        'estado',
     ];
 
     protected $hidden = ['password'];
@@ -28,14 +34,13 @@ class Usuario extends Authenticatable
 
     public function cliente()
     {
-        return $this->hasOne(Cliente::class);
+        return $this->hasOne(Cliente::class, 'usuario_id');
     }
 
     public function hasRol($nombre)
     {
         return $this->roles()->where('nombre', $nombre)->exists();
     }
-
-
+    
 }
 

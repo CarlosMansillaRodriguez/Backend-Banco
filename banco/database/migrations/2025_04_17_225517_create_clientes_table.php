@@ -14,11 +14,9 @@ return new class extends Migration
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
             $table->integer('ci')->unique();
-            $table->string('nombre');
-            $table->string('apellido');
             $table->integer('telefono');
             $table->string('direccion');
-            $table->string('genero');
+            $table->tinyInteger('estado')->default(1);
             $table->foreignId('usuario_id')->constrained('usuarios')->onDelete('cascade');
             $table->timestamps();
         });

@@ -23,13 +23,13 @@ class BitacoraController extends Controller
         ], 201);
     }
 
-    public function registrarBitacora(Request $request, $descripcion)
-{
-    Bitacora::create([
-        'usuario_id' => auth()->id(),
-        'fecha' => now(),
-        'ip_usuario' => Request::ip(),
-        'descripcion' => $descripcion
-    ]);
-}
+    // public function registrarBitacora(Request $request, $descripcion)
+    // {
+    //     Bitacora::create([
+    //         'usuario_id' => auth()->id(),
+    //         'fecha' => now(),
+    //         'ip_usuario' => Request::ip(),
+    //         'descripcion' => $descripcion
+    //     ]);
+    // }
 }

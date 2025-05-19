@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('cuentas', function (Blueprint $table) {
             $table->id();
             $table->string('numero_cuenta')->unique();
-            $table->string('estado');
-            $table->date('fecha_de_apertura');
+            $table->string('estado');//v2
             $table->decimal('saldo',12,2);
             $table->string('tipo_de_cuenta');
             $table->string('moneda');

@@ -10,7 +10,11 @@ class PermisoController extends Controller
     public function index()
     {
         $permisos = Permiso::all();
-        return response()->json($permisos);
+        return response()->json([
+            'status' => true,
+            'message' => 'Lista de permisos obtenida correctamente.',
+            'permisos' => $permisos
+        ]);
     }
 
     public function store(Request $request)
@@ -49,6 +53,36 @@ public function update(Request $request, $id)
         'permiso' => $permiso
     ]);
 }
+
+public function destroy(string $id)
+    {
+        // Buscar el permiso por ID
+        $permiso = Permiso::find($id);
+
+        if (!$permiso) {
+            return response()->json([
+                'status' => false,
+                'error' => 'Permiso no encontrado'
+            ], 404);
+        }
+
+        try {
+            // Eliminar físicamente el registro
+            $permiso->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Permiso eliminado correctamente.'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'error' => 'Error al eliminar el permiso',
+                'details' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     public function asignarPermiso(Request $request)
     {

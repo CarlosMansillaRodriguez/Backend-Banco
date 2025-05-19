@@ -24,5 +24,15 @@ class Cuenta extends Model
     {
         return $this->belongsTo(Cliente::class, 'cliente_id');
     }
+
+    //Cambio de Carlos
+    public function tarjetas()
+{
+    return $this->hasMany(Tarjeta::class);
+}
+public function celular()
+{
+    return $this->belongsTo(Celular::class);
+}
 }
 

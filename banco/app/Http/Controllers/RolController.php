@@ -20,9 +20,21 @@ class RolController extends Controller
         $validated = $request->validate([
             'nombre' => 'required|string|unique:roles,nombre',
             'descripcion' => 'nullable|string',
+            'permisos' => 'sometimes|array', // Añade validación para permisos
+            'permisos.*' => 'exists:permisos,id' // Valida que los permisos existan
+            
         ]);
 
-        $rol = Rol::create($validated);
+        //$rol = Rol::create($validated);
+        $rol = Rol::create([
+            'nombre' => $validated['nombre'],
+            'descripcion' => $validated['descripcion'] ?? null
+        ]);
+
+        // Asignar permisos si existen en el request
+        if (isset($validated['permisos'])) {
+            $rol->permisos()->sync($validated['permisos']);
+        }
 
         return response()->json([
             'message' => 'Rol creado correctamente',
@@ -49,7 +61,7 @@ class RolController extends Controller
     }
 
     // Actualizar un rol
-    public function update(Request $request, $id)
+/*     public function update(Request $request, $id)
     {
         $rol = Rol::findOrFail($id);
 
@@ -72,7 +84,43 @@ class RolController extends Controller
             'message' => 'Rol actualizado correctamente',
             'rol' => $rol
         ], 200);
+    } */
+
+public function update(Request $request, $id)
+{
+    $rol = Rol::findOrFail($id);
+
+    if (!$rol) {
+        return response()->json([
+            'status' => false,
+            'message' => 'No se encontró el rol'
+        ], 404);
     }
+
+    $validated = $request->validate([
+        'nombre' => 'required|string|unique:roles,nombre,' . $id,
+        'descripcion' => 'nullable|string',
+        'permisos' => 'sometimes|array', // Añade validación para permisos
+        'permisos.*' => 'exists:permisos,id' // Valida que los permisos existan
+    ]);
+
+    $rol->update($validated);
+
+    // Sincronizar permisos si existen en el request
+    if ($request->has('permisos') && is_array($request->input('permisos'))) {
+        $rol->permisos()->sync($request->input('permisos'));
+    } else {
+        // Opcional: limpiar permisos si no se envía nada
+        $rol->permisos()->detach();
+    }
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Rol actualizado correctamente',
+        'rol' => $rol->load('permisos')
+    ], 200);
+}
+
 
     // Eliminar rol (solo si no tiene usuarios)
     public function destroy($id)
@@ -101,6 +149,17 @@ class RolController extends Controller
         ], 200);
     }
 
+    ///// Obtener permisos de un rol específico (agregador por ENRIQUE)
+    public function permisos($id)
+    {
+        $rol = Rol::findOrFail($id);
+        $permisos = $rol->permisos; // Relación muchos a muchos
+    
+        return response()->json([
+            'status' => true,
+            'data' => $permisos
+        ]);
+    }
     // // Asignar permisos a un rol
     // public function asignarPermisos(Request $request, $id)
     // {

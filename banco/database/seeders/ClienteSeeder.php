@@ -16,16 +16,17 @@ class ClienteSeeder extends Seeder
             'nombre_user' => 'Pedro Cliente',
             'email' => 'pedro@cliente.com',
             'password' => Hash::make('cliente123'),
+            'nombre' => 'Pedro',
+            'apellido' => 'Gómez',
+            'fecha_nacimiento' => '1990-01-01',
+            'genero' => 'M',
         ]);
 
         // Crear cliente asociado al usuario
         Cliente::create([
             'ci' => '9876543',
-            'nombre' => 'Pedro',
-            'apellido' => 'Gómez',
-            'telefono' => '76438291',
             'direccion' => 'Barrio Mutualista',
-            'genero' => 'M',
+            'telefono' => '76438291',
             'usuario_id' => $usuario->id,
         ]);
     }

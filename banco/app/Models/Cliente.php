@@ -9,7 +9,7 @@ class Cliente extends Model
     protected $table = 'clientes';
 
     protected $fillable = [
-        'ci', 'nombre', 'apellido', 'telefono', 'direccion', 'genero', 'usuario_id'
+        'ci', 'telefono', 'direccion', 'usuario_id', 'estado'
     ];
 
     public function usuario()
@@ -21,4 +21,10 @@ class Cliente extends Model
     {
         return $this->hasMany(Cuenta::class, 'cliente_id');
     }
+    //modificado por carlos
+    public function cuenta()
+    {
+        return $this->hasOne(Cuenta::class);
+    }
+
 }

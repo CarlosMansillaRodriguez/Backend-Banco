@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bitacoras', function (Blueprint $table) {
+        Schema::create('tecnicos', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('fecha');
-            $table->string('ip_usuario');
-            $table->string('descripcion');
-            $table->unsignedBigInteger('usuario_id')->nullable();
-            $table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('nombre_empresa');
+            $table->string('telefono');
+            $table->foreignId('usuario_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bitacoras');
+        Schema::dropIfExists('tecnicos');
     }
 };

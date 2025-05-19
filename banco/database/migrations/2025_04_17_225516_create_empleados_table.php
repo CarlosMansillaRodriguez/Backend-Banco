@@ -11,24 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('usuarios', function (Blueprint $table) {
+        Schema::create('empleados', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre_user');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->string('nombre');
-            $table->string('apellido');
-            $table->string('genero');
-            $table->date('fecha_nacimiento');
+            $table->date('fecha_contrato');
+            $table->string('cargo');
+            $table->time('horario_entrada');
+            $table->time('horario_salida');
             $table->tinyInteger('estado')->default(1);
+            $table->foreignId('usuario_id')->constrained('usuarios')->onDelete('cascade');
             $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('usuarios');
+        Schema::dropIfExists('empleados');
     }
 };
