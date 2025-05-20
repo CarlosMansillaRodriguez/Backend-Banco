@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('numero_cuenta')->unique();
             $table->string('estado');//v2
+            $table->date('fecha_de_apertura');
             $table->decimal('saldo',12,2);
             $table->string('tipo_de_cuenta');
             $table->string('moneda');
