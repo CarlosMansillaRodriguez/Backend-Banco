@@ -27,12 +27,17 @@ class Cuenta extends Model
 
     //Cambio de Carlos
     public function tarjetas()
-{
-    return $this->hasMany(Tarjeta::class);
-}
-public function celular()
-{
-    return $this->belongsTo(Celular::class);
-}
+    {
+        return $this->hasMany(Tarjeta::class);
+    }
+    public function celular()
+    {
+        return $this->belongsTo(Celular::class);
+    }
+
+    public function heredero()
+    {
+        return $this->belongsTo(Heredero::class);
+    }
 }
 
