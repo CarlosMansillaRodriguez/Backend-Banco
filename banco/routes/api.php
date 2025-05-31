@@ -16,7 +16,8 @@ use App\Http\Controllers\TecnicoController;
 use App\Http\Controllers\TarjetaController;
 use App\Http\Controllers\CelularController;
 use App\Http\Controllers\ReporteController;
-
+use App\Http\Controllers\NotificacionController;
+use App\Http\Controllers\transaccionController;
 
 // Rutas públicas
 Route::post('/register', [AuthController::class, 'register']);
@@ -46,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // CRUD de CUENTAS
     Route::apiResource('cuentas', CuentaController::class);
-
+    Route::get('/cuentas/obtener-detalles/{numero}', [CuentaController::class, 'obtenerDetalles']);
     // CRUD de ROLES
     Route::apiResource('roles', RolController::class);
     Route::get('/roles/{id}/permisos', [RolController::class, 'permisos']);
@@ -70,6 +71,19 @@ Route::middleware('auth:sanctum')->group(function () {
     // REGISTRO POR CELULAR sin token
 
     Route::post('/celular/registrar-sin-token', [CelularController::class, 'registrarConCredenciales']);
+    //NOTIFICACIONES
+    Route::get('/notificaciones', [NotificacionController::class, 'index']);
+    Route::put('/notificaciones/{notification}/marcar-como-leida', [NotificacionController::class, 'markAsRead']);
+    Route::put('/notificaciones/marcar-todas-como-leidas', [NotificacionController::class, 'markAllAsRead']);
+    Route::get('/notificaciones/{notification}', [NotificacionController::class, 'show']);
+
+    //TRANSACCIONES
+    Route::apiResource('transacciones', transaccionController::class);
+/*     Route::get('/transacciones', [transaccionController::class, 'index']);
+    Route::get('/transacciones/{id}', [TransaccionController::class, 'show']);
+    Route::put('/transacciones/{id}', [TransaccionController::class, 'update']);
+    Route::delete('/transacciones/{id}', [TransaccionController::class, 'destroy']);
+    Route::post('/transacciones', [TransaccionController::class, 'store']); */
 
 });
 Route::get('/db-check', function () {

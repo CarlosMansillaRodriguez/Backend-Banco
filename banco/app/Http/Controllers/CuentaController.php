@@ -6,6 +6,8 @@ use Illuminate\Support\Str;
 use App\Models\Cliente;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class CuentaController extends Controller
 {
@@ -56,7 +58,7 @@ class CuentaController extends Controller
         ], 201);
     }*/
 
-    public function show($numero_cuenta)
+public function show($numero_cuenta)
     {
         // Obtener una cuenta específica
         $cuenta = Cuenta::findOrFail($numero_cuenta);
@@ -70,6 +72,7 @@ class CuentaController extends Controller
 
         return response()->json($cuenta);
     } 
+
     public function store(Request $request)
     {
         // Validación de datos del usuario, cliente y cuenta
@@ -204,7 +207,7 @@ class CuentaController extends Controller
         ], 200);
     } */
 
-    public function update(Request $request, string $id)
+public function update(Request $request, string $id)
 {
     // Buscar la cuenta por ID
     $cuenta = Cuenta::with('cliente.usuario')->findOrFail($id);
@@ -291,6 +294,10 @@ class CuentaController extends Controller
         ], 500);
     }
 }
+
+
+
+
     public function destroy(string $id)
     {
         //$this->autorizar();
@@ -333,6 +340,32 @@ class CuentaController extends Controller
                 ], 500);
             }
     }
+    /////////////////////////////////////////////////////////
+    public function obtenerDetalles($numero)
+    {
+        $cuenta = Cuenta::with(['cliente.usuario'])->where('numero_cuenta', $numero)->first();
+
+        if (!$cuenta) {
+            return response()->json([
+                'success' => false,
+                'message' => 'La cuenta no existe.'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'id' => $cuenta->id,
+                'saldo' => $cuenta->saldo,
+                'usuario' => [
+                    'nombre' => $cuenta->cliente->usuario->nombre,
+                    'apellido' => $cuenta->cliente->usuario->apellido,
+                ]
+            ]
+        ]);
+    }
+
+
     public function getCuentasByCliente($clienteId)
     {
         // Obtener todas las cuentas de un cliente específico

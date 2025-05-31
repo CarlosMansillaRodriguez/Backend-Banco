@@ -26,5 +26,9 @@ class Cliente extends Model
     {
         return $this->hasOne(Cuenta::class);
     }
+    public function notificaciones()
+    {
+        return $this->hasMany(Notificacione::class, 'id_cliente', 'id');
+    }
 
 }

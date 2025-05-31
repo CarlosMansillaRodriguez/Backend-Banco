@@ -13,4 +13,8 @@ class Atm extends Model
         'saldo',
         'ubicacion',
     ];
+    public function notificaciones()
+    {
+        return $this->hasMany(Notificacione::class, 'id_atm', 'id');
+    }
 }
